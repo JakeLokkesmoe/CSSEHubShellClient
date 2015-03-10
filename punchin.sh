@@ -1,5 +1,5 @@
 #!/bin/sh
-DEFAULT_USERNAME=lokkesmoej
+DEFAULT_USERNAME="Your_Username_Here"
 
 #clean up session file on exit
 trap "rm -f cookiefile" EXIT
