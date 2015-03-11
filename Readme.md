@@ -14,6 +14,9 @@ This will install the shell script in your local usr bin. Assuming you have `/us
 
 You will be prompted for your username and password. Then you will be punched into CSSE Hub.
 
+### Required Packages
+Logging into IO requires [sshpass](http://sourceforge.net/projects/sshpass/) to be install on your machine. 
+
 ## Features
 Right now, all it can do is punch in to the CSSE Hub. (But only into SE Project II)
 
