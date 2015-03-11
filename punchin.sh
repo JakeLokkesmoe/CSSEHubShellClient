@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 DEFAULT_USERNAME="lokkesmoej"
 
 #clean up session file on exit
