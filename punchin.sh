@@ -43,10 +43,25 @@ fi
 printf "\nLogging into IO... (Exit ssh to punch out)\n"
 sshpass -p $password ssh $username@io.uwplatt.edu -t 'cd IO_REPO_PATH; pwd; svn update; ls; $SHELL'
 
-printf "\nEnter punch out message or leave blank to remain punched in:\n"
+# Get Latest svn commit message
+pattern="r[0-9]+[[:space:]|]*$username[|[:space:]]{3}[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} -[0-9]{4} [0-9a-zA-Z(),[:space:]|]{23}lines?"
+commitMsg=$(svn log --username $username --password $password -l 50 https://xray.ion.uwplatt.edu:8443/svn/courses/S15/clifton/se4730/everyone/ | awk -v pat="$pattern" '/^$/ {next} $0 ~ pat {flag=1;next} /------------------------------------------------------------------------/ {flag=0} flag' | head -n1)
+if [ -n "$commitMsg" ]; then
+   printf "\nLast SVN Commit message is:\n\t$commitMsg\n"
+   printf "Enter \"n\" to remain punched in or a punch out message. Leave blank to use last svn message:\n"
+else
+   printf "Enter \"n\" to remain punched in or a punch out message:\n"
+fi
+
 read message
 
-if [ -z "$message" ]; then # if the message is null
+if [ -z "$message" ]; then
+   if [ -n "$commitMsg" ]; then
+      message=$commitMsg;
+   else
+      printf "No SVN Commit message found. You are still punched in.\n"; exit 0
+   fi
+elif [ "$message" = "n" ]; then # if the message is null
    printf "You are still punched in.\n"; exit 0
 fi
 
