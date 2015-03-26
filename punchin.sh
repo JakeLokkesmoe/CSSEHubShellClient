@@ -98,7 +98,7 @@ printf "\n"
 #if error punching
 if [[ $res != *\"status\":\"ok\"* ]]; then
    printf "Error: "
-   echo $res | awk '{ if (match($0, /\"message\":\"[^\"]*\"/)) print substr($0, RSTART+11, RLENGTH-12); else print "Unknown error punching in." }'
+   echo $res | awk '{ if (match($0, /\"message\":\"[^\"]*\"/)) print substr($0, RSTART+11, RLENGTH-12); else print "Unknown error punching out." }'
 else
    printf "Punched out of CSSE Hub successfully\n"
 fi
