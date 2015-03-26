@@ -46,42 +46,44 @@ sshpass -p $password ssh $username@io.uwplatt.edu -t 'cd IO_REPO_PATH; pwd; svn 
 printf "\nEnter punch out message or leave blank to remain punched in:\n"
 read message
 
-if [ -n "$message" ]; then # if the message is not null
-   phase="NO_PHASE"
+if [ -z "$message" ]; then # if the message is null
+   printf "You are still punched in.\n"; exit 0
+fi
 
-   while [ "$phase" = "NO_PHASE" ]; do
-      printf "\nPhases:\n  C  - Coding\n  D  - Debugging\n  De - Design\n  I  - Integration\n  M  - Meeting\n  Mi - Misc\n  R  - Research\n  T  - Testing\nEnter Phase: "
-      read phase
+phase="NO_PHASE"
 
-      if [ "$phase" = "C" -o "$phase" = "c" ]; then
-         phase="Coding"
-      elif [ "$phase" = "D" -o "$phase" = "d" ]; then
-         phase="Debugging"
-      elif [ "$phase" = "De" -o "$phase" = "de" ]; then
-         phase="Design"
-      elif [ "$phase" = "I" -o "$phase" = "i" ]; then
-         phase="Integration"
-      elif [ "$phase" = "M" -o "$phase" = "m" ]; then
-         phase="Meeting"
-      elif [ "$phase" = "Mi" -o "$phase" = "mi" ]; then
-         phase="Misc"
-      elif [ "$phase" = "R" -o "$phase" = "r" ]; then
-         phase="Research"
-      elif [ "$phase" = "T" -o "$phase" = "t" ]; then
-         phase="Testing"
-      else
-         phase="NO_PHASE"
-      fi
-   done
+while [ "$phase" = "NO_PHASE" ]; do
+   printf "\nPhases:\n  C  - Coding\n  D  - Debugging\n  De - Design\n  I  - Integration\n  M  - Meeting\n  Mi - Misc\n  R  - Research\n  T  - Testing\nEnter Phase: "
+   read phase
 
-   res=$(curl -silent -L -b cookiefile -d "courseName=se4730&projectName=Project&inComment=$message&inPhase=$phase" http://xray.ion.uwplatt.edu/CSSE/Home/punchout)
-   printf "\n"
-
-   #if error punching
-   if [[ $res != *\"status\":\"ok\"* ]]; then
-      printf "Error: "
-      echo $res | awk '{ if (match($0, /\"message\":\"[^\"]*\"/)) print substr($0, RSTART+11, RLENGTH-12); else print "Unknown error punching in." }'
+   if [ "$phase" = "C" -o "$phase" = "c" ]; then
+      phase="Coding"
+   elif [ "$phase" = "D" -o "$phase" = "d" ]; then
+      phase="Debugging"
+   elif [ "$phase" = "De" -o "$phase" = "de" ]; then
+      phase="Design"
+   elif [ "$phase" = "I" -o "$phase" = "i" ]; then
+      phase="Integration"
+   elif [ "$phase" = "M" -o "$phase" = "m" ]; then
+      phase="Meeting"
+   elif [ "$phase" = "Mi" -o "$phase" = "mi" ]; then
+      phase="Misc"
+   elif [ "$phase" = "R" -o "$phase" = "r" ]; then
+      phase="Research"
+   elif [ "$phase" = "T" -o "$phase" = "t" ]; then
+      phase="Testing"
    else
-      printf "Punched out of CSSE Hub successfully\n"
+      phase="NO_PHASE"
    fi
+done
+
+res=$(curl -silent -L -b cookiefile -d "courseName=se4730&projectName=Project&inComment=$message&inPhase=$phase" http://xray.ion.uwplatt.edu/CSSE/Home/punchout)
+printf "\n"
+
+#if error punching
+if [[ $res != *\"status\":\"ok\"* ]]; then
+   printf "Error: "
+   echo $res | awk '{ if (match($0, /\"message\":\"[^\"]*\"/)) print substr($0, RSTART+11, RLENGTH-12); else print "Unknown error punching in." }'
+else
+   printf "Punched out of CSSE Hub successfully\n"
 fi
