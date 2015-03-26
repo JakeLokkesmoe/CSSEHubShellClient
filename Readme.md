@@ -27,4 +27,6 @@ Right now, all it can do is punch in to the CSSE Hub. (But only into SE Project 
 ## How it works
 Bascially, it runs two `curl`s. The first one logs you into CSSE Hub and stores the session cookies in a temp file. The second one punches you in. Right now, it only punches you into `se4730`. I have no plans to change that at the moment.
 
+After you are punched in, you are logged into IO, `cd`ed into your svn repo which is then updated. Once you are done and ready to punch out, run `exit` to leave the ssh. The script will then prompt you for a punch out message. If you have a recent SVN commit message, it will be displayed and you will have the option to use that as your punch out message.
+
 Note: I have no idea what will happen if you try and run this without being in se4730.
