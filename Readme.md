@@ -10,7 +10,11 @@ cp punchin.sh /usr/local/bin/punchin
 chmod +rx /usr/local/bin/punchin
 ```
 
-This will install the shell script in your local usr bin. Assuming you have `/usr/local/bin` on your `$PATH`, you can now punch in to CSSE hub by running `punchin` from a terminal.
+This will install the shell script in your local usr bin.
+
+Next, open `/usr/local/bin/punchin` in your prefered text editor. Change the default username to your username and the project repo path to the path to your copy of the repo on IO.
+
+Assuming you have `/usr/local/bin` on your `$PATH`, you can now punch in to CSSE hub by running `punchin` from a terminal.
 
 You will be prompted for your username and password. Then you will be punched into CSSE Hub.
 
